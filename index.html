@@ -1,0 +1,489 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Beth Bread — Send Love Across Every Distance | San Jose Surprises</title>
+<meta name="description" content="Handmade chocolates, fresh flowers, bobo balloons and handwritten love letters, crafted in San Jose and delivered across the USA. Every surprise is custom made for your love story.">
+<meta name="theme-color" content="#0a0406">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#0a0406;
+    --bg-soft:#120709;
+    --ink:#f6ece6;
+    --ink-dim:#c9b3ac;
+    --ink-faint:#8a6f6a;
+    --rose:#e34b5f;
+    --rose-deep:#8c1f33;
+    --gold:#e9b872;
+    --line:rgba(246,236,230,0.1);
+    --glass:rgba(255,255,255,0.045);
+    --glass-border:rgba(255,255,255,0.09);
+    --radius:22px;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;}
+  html{scroll-behavior:smooth;}
+  body{
+    background:var(--bg);
+    color:var(--ink);
+    font-family:'Inter',sans-serif;
+    font-weight:300;
+    line-height:1.6;
+    overflow-x:hidden;
+    -webkit-font-smoothing:antialiased;
+  }
+  h1,h2,h3,.serif{font-family:'Cormorant Garamond',serif;font-weight:500;letter-spacing:0.01em;}
+  a{color:inherit;text-decoration:none;}
+  img{max-width:100%;display:block;}
+  .wrap{max-width:1180px;margin:0 auto;padding:0 28px;}
+  .eyebrow{
+    display:inline-flex;align-items:center;gap:10px;
+    font-size:12.5px;letter-spacing:0.22em;text-transform:uppercase;
+    color:var(--gold);font-weight:500;margin-bottom:18px;
+  }
+  .eyebrow::before{content:'';width:26px;height:1px;background:linear-gradient(90deg,var(--gold),transparent);}
+  .grad-text{
+    background:linear-gradient(100deg,#fff 10%,var(--gold) 45%,var(--rose) 75%,#fff 100%);
+    background-size:220% auto;
+    -webkit-background-clip:text;background-clip:text;color:transparent;
+    animation:sheen 9s linear infinite;
+  }
+  @keyframes sheen{to{background-position:-220% center;}}
+
+  /* Aurora background */
+  .aurora{position:fixed;inset:0;z-index:-2;overflow:hidden;background:var(--bg);}
+  .aurora span{
+    position:absolute;border-radius:50%;filter:blur(90px);opacity:0.55;
+    animation:float 22s ease-in-out infinite;
+  }
+  .aurora span:nth-child(1){width:520px;height:520px;background:radial-gradient(circle,var(--rose-deep),transparent 70%);top:-140px;left:-120px;animation-duration:26s;}
+  .aurora span:nth-child(2){width:460px;height:460px;background:radial-gradient(circle,var(--gold),transparent 70%);top:10%;right:-160px;opacity:0.28;animation-duration:30s;animation-delay:-6s;}
+  .aurora span:nth-child(3){width:600px;height:600px;background:radial-gradient(circle,var(--rose),transparent 72%);bottom:-220px;left:20%;opacity:0.3;animation-duration:34s;animation-delay:-12s;}
+  .grain{position:fixed;inset:0;z-index:-1;opacity:0.035;pointer-events:none;
+    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");}
+  @keyframes float{
+    0%,100%{transform:translate(0,0) scale(1);}
+    50%{transform:translate(40px,-30px) scale(1.08);}
+  }
+
+  /* Nav */
+  header{
+    position:fixed;top:0;left:0;right:0;z-index:50;
+    padding:18px 0;transition:all .4s ease;
+  }
+  header.scrolled{
+    background:rgba(10,4,6,0.65);
+    backdrop-filter:blur(18px) saturate(160%);
+    -webkit-backdrop-filter:blur(18px) saturate(160%);
+    border-bottom:1px solid var(--glass-border);
+    padding:12px 0;
+  }
+  nav{display:flex;align-items:center;justify-content:space-between;}
+  .logo{font-family:'Cormorant Garamond',serif;font-size:24px;font-weight:600;letter-spacing:0.02em;}
+  .nav-links{display:flex;gap:34px;font-size:14px;color:var(--ink-dim);}
+  .nav-links a{position:relative;transition:color .3s;}
+  .nav-links a:hover{color:var(--ink);}
+  .nav-links a::after{content:'';position:absolute;left:0;bottom:-5px;width:0;height:1px;background:var(--gold);transition:width .3s;}
+  .nav-links a:hover::after{width:100%;}
+  .nav-actions{display:flex;align-items:center;gap:22px;}
+  .nav-actions .ig{font-size:13.5px;color:var(--ink-dim);}
+  .btn{
+    display:inline-flex;align-items:center;gap:8px;
+    padding:13px 26px;border-radius:999px;font-size:14px;font-weight:500;
+    background:linear-gradient(120deg,var(--rose),var(--rose-deep));
+    color:#fff;box-shadow:0 10px 30px -8px rgba(227,75,95,0.55);
+    transition:transform .3s ease, box-shadow .3s ease;
+    border:1px solid rgba(255,255,255,0.14);
+  }
+  .btn:hover{transform:translateY(-2px);box-shadow:0 16px 40px -10px rgba(227,75,95,0.7);}
+  .btn.ghost{
+    background:var(--glass);border:1px solid var(--glass-border);
+    box-shadow:none;color:var(--ink);backdrop-filter:blur(10px);
+  }
+  .btn.ghost:hover{background:rgba(255,255,255,0.08);}
+  .mobile-toggle{display:none;}
+
+  section{position:relative;padding:130px 0;}
+  .reveal{opacity:0;transform:translateY(28px);transition:opacity .9s cubic-bezier(.2,.7,.2,1),transform .9s cubic-bezier(.2,.7,.2,1);}
+  .reveal.in{opacity:1;transform:translateY(0);}
+  .d1{transition-delay:.08s;} .d2{transition-delay:.16s;} .d3{transition-delay:.24s;} .d4{transition-delay:.32s;} .d5{transition-delay:.4s;} .d6{transition-delay:.48s;}
+
+  /* Hero */
+  .hero{padding-top:190px;padding-bottom:90px;}
+  .hero-grid{display:grid;grid-template-columns:1.05fr 0.95fr;gap:60px;align-items:center;}
+  .hero h1{font-size:clamp(42px,5.4vw,74px);line-height:1.04;margin-bottom:26px;}
+  .hero p.sub{color:var(--ink-dim);font-size:18px;max-width:480px;margin-bottom:34px;}
+  .hero-cta{display:flex;gap:16px;flex-wrap:wrap;margin-bottom:26px;}
+  .hero-note{font-size:13px;color:var(--ink-faint);letter-spacing:0.02em;}
+  .hero-media{position:relative;}
+  .hero-media .frame{
+    position:relative;border-radius:28px;overflow:hidden;
+    box-shadow:0 40px 90px -30px rgba(0,0,0,0.7);
+    border:1px solid var(--glass-border);
+  }
+  .hero-media .frame img{aspect-ratio:4/5;object-fit:cover;transform:scale(1.02);transition:transform 1.2s ease;}
+  .hero-media:hover .frame img{transform:scale(1.08);}
+  .hero-media .frame::after{content:'';position:absolute;inset:0;background:linear-gradient(180deg,transparent 55%,rgba(10,4,6,0.75));}
+  .float-badge{
+    position:absolute;bottom:-22px;left:-30px;
+    background:rgba(18,7,9,0.75);backdrop-filter:blur(16px);
+    border:1px solid var(--glass-border);border-radius:18px;
+    padding:16px 20px;max-width:230px;font-size:13px;color:var(--ink-dim);
+    box-shadow:0 20px 50px -20px rgba(0,0,0,0.6);
+    animation:bob 5s ease-in-out infinite;
+  }
+  @keyframes bob{0%,100%{transform:translateY(0);}50%{transform:translateY(-10px);}}
+  .scroll-cue{display:flex;align-items:center;gap:10px;margin-top:60px;font-size:12.5px;color:var(--ink-faint);letter-spacing:0.12em;text-transform:uppercase;}
+  .scroll-cue .line{width:1px;height:34px;background:linear-gradient(180deg,var(--gold),transparent);animation:pulse 2s ease-in-out infinite;}
+  @keyframes pulse{0%,100%{opacity:.3;}50%{opacity:1;}}
+
+  /* Story */
+  .story-grid{display:grid;grid-template-columns:0.85fr 1.15fr;gap:70px;align-items:center;}
+  .story-grid .frame{border-radius:24px;overflow:hidden;border:1px solid var(--glass-border);box-shadow:0 30px 70px -30px rgba(0,0,0,0.6);}
+  .story-grid .frame img{aspect-ratio:1/1;object-fit:cover;}
+  .story h2{font-size:clamp(30px,3.4vw,44px);margin-bottom:22px;line-height:1.2;}
+  .story p{color:var(--ink-dim);font-size:16.5px;margin-bottom:18px;max-width:560px;}
+  .story .tag{margin-top:26px;}
+
+  /* Surprises */
+  .section-head{max-width:640px;margin-bottom:60px;}
+  .section-head h2{font-size:clamp(30px,3.6vw,46px);line-height:1.15;margin-bottom:16px;}
+  .section-head p{color:var(--ink-dim);font-size:16.5px;}
+  .cards{display:grid;grid-template-columns:repeat(3,1fr);gap:26px;}
+  .card{
+    position:relative;border-radius:var(--radius);overflow:hidden;
+    background:var(--glass);border:1px solid var(--glass-border);
+    transition:transform .5s cubic-bezier(.2,.8,.2,1), border-color .4s;
+  }
+  .card:hover{transform:translateY(-8px);border-color:rgba(233,184,114,0.4);}
+  .card .img-wrap{position:relative;aspect-ratio:4/3;overflow:hidden;}
+  .card .img-wrap img{width:100%;height:100%;object-fit:cover;transition:transform .7s ease;}
+  .card:hover .img-wrap img{transform:scale(1.1);}
+  .card .img-wrap::after{content:'';position:absolute;inset:0;background:linear-gradient(180deg,transparent 40%,rgba(10,4,6,0.9));}
+  .card-body{padding:24px 24px 28px;}
+  .card-body h3{font-size:21px;margin-bottom:10px;}
+  .card-body p{color:var(--ink-dim);font-size:14.5px;margin-bottom:14px;}
+  .card-tags{display:flex;flex-wrap:wrap;gap:8px;font-size:11.5px;color:var(--gold);letter-spacing:0.03em;}
+  .card-tags span{background:rgba(233,184,114,0.09);border:1px solid rgba(233,184,114,0.2);padding:5px 10px;border-radius:999px;}
+  .card.wide{grid-column:span 3;background:linear-gradient(120deg,rgba(227,75,95,0.12),rgba(233,184,114,0.06));display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:22px;padding:38px 34px;border:1px solid var(--glass-border);}
+  .card.wide h3{font-size:24px;margin-bottom:8px;}
+  .card.wide p{color:var(--ink-dim);font-size:15px;max-width:520px;}
+
+  /* How it works */
+  .steps{display:grid;grid-template-columns:repeat(3,1fr);gap:34px;counter-reset:step;}
+  .step{
+    position:relative;padding:34px 28px 28px;border-radius:20px;
+    background:var(--glass);border:1px solid var(--glass-border);
+  }
+  .step .num{
+    width:46px;height:46px;border-radius:50%;
+    display:flex;align-items:center;justify-content:center;
+    font-family:'Cormorant Garamond',serif;font-size:20px;font-weight:600;
+    background:linear-gradient(135deg,var(--rose),var(--gold));color:#1a0507;
+    margin-bottom:20px;
+  }
+  .step h3{font-size:19px;margin-bottom:10px;}
+  .step p{color:var(--ink-dim);font-size:14.5px;}
+  .steps-note{margin-top:36px;padding:22px 26px;border-left:2px solid var(--gold);color:var(--ink-dim);font-size:14.5px;background:rgba(233,184,114,0.05);border-radius:0 14px 14px 0;}
+
+  /* Testimonials marquee */
+  .marquee-outer{overflow:hidden;position:relative;mask-image:linear-gradient(90deg,transparent,black 8%,black 92%,transparent);}
+  .marquee{display:flex;gap:24px;width:max-content;animation:scroll-left 42s linear infinite;}
+  .marquee:hover{animation-play-state:paused;}
+  @keyframes scroll-left{from{transform:translateX(0);}to{transform:translateX(-50%);}}
+  .quote-card{
+    width:380px;flex:none;padding:30px;border-radius:20px;
+    background:var(--glass);border:1px solid var(--glass-border);
+  }
+  .quote-card p.q{font-size:16.5px;font-family:'Cormorant Garamond',serif;font-style:italic;color:var(--ink);margin-bottom:20px;line-height:1.5;}
+  .quote-card .who{font-size:13px;color:var(--gold);letter-spacing:0.03em;}
+
+  /* CTA / Contact */
+  .cta-panel{
+    border-radius:32px;padding:64px 56px;position:relative;overflow:hidden;
+    background:linear-gradient(135deg,rgba(140,31,51,0.35),rgba(233,184,114,0.08));
+    border:1px solid var(--glass-border);
+    text-align:center;
+  }
+  .cta-panel h2{font-size:clamp(30px,4vw,48px);margin-bottom:16px;}
+  .cta-panel p{color:var(--ink-dim);max-width:560px;margin:0 auto 36px;font-size:16.5px;}
+  .contact-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;margin-top:44px;text-align:left;}
+  .contact-card{
+    padding:24px;border-radius:18px;background:rgba(255,255,255,0.04);
+    border:1px solid var(--glass-border);transition:transform .35s ease,border-color .35s;
+  }
+  .contact-card:hover{transform:translateY(-5px);border-color:rgba(233,184,114,0.4);}
+  .contact-card .label{font-size:12px;text-transform:uppercase;letter-spacing:0.14em;color:var(--gold);margin-bottom:8px;}
+  .contact-card .val{font-size:17px;margin-bottom:6px;}
+  .contact-card .hint{font-size:13px;color:var(--ink-faint);}
+
+  footer{padding:60px 0 40px;border-top:1px solid var(--line);}
+  .foot-grid{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:20px;}
+  .foot-links{display:flex;gap:26px;font-size:13.5px;color:var(--ink-dim);}
+  .foot-tag{font-size:12.5px;color:var(--ink-faint);letter-spacing:0.05em;}
+
+  @media (max-width:900px){
+    .nav-links{display:none;}
+    .hero-grid,.story-grid{grid-template-columns:1fr;}
+    .story-grid{gap:40px;}
+    .cards{grid-template-columns:1fr;}
+    .card.wide{grid-column:span 1;}
+    .steps{grid-template-columns:1fr;}
+    .contact-grid{grid-template-columns:1fr;}
+    .float-badge{display:none;}
+    section{padding:90px 0;}
+  }
+</style>
+</head>
+<body>
+
+<div class="aurora"><span></span><span></span><span></span></div>
+<div class="grain"></div>
+
+<header id="siteHeader">
+  <div class="wrap">
+    <nav>
+      <a href="#top" class="logo">Beth Bread</a>
+      <div class="nav-links">
+        <a href="#story">Our Story</a>
+        <a href="#surprises">Surprises</a>
+        <a href="#how">How It Works</a>
+        <a href="#love">Love Notes</a>
+      </div>
+      <div class="nav-actions">
+        <a class="ig" href="https://instagram.com/sanjosesurprises" target="_blank" rel="noopener">@sanjosesurprises</a>
+        <a class="btn" href="https://wa.me/16696499296?text=Hi%20Anu!%20I%20saw%20your%20website%20and%20I%27d%20love%20to%20plan%20a%20surprise." target="_blank" rel="noopener">Plan a surprise</a>
+      </div>
+    </nav>
+  </div>
+</header>
+
+<main id="top">
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="wrap hero-grid">
+      <div class="reveal in">
+        <div class="eyebrow">From San Jose With Love</div>
+        <h1>Send love across <span class="grad-text">every distance</span></h1>
+        <p class="sub">Handmade chocolates, fresh flowers, bobo balloons and letters written in real ink — crafted in our San Jose home and delivered to the person you miss.</p>
+        <div class="hero-cta">
+          <a class="btn" href="https://wa.me/16696499296?text=Hi%20Anu!%20I%20saw%20your%20website%20and%20I%27d%20love%20to%20plan%20a%20surprise." target="_blank" rel="noopener">Start a surprise</a>
+          <a class="btn ghost" href="#surprises">See what we make</a>
+        </div>
+        <p class="hero-note">No fixed prices — every gift is quoted to your story</p>
+        <div class="scroll-cue"><span class="line"></span> Scroll to our story</div>
+      </div>
+      <div class="hero-media reveal d2">
+        <div class="frame">
+          <img src="https://bethbread-sanjose-surprises.vercel.app/images/kitchen.png" alt="Hands tying a red satin ribbon around a small handmade gift box in a warmly lit home kitchen">
+        </div>
+        <div class="float-badge">"My wife opened the balloon and cried. I was 2,000 miles away and somehow I was in the room with her."</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- STORY -->
+  <section id="story">
+    <div class="wrap story-grid">
+      <div class="frame reveal">
+        <img src="https://bethbread-sanjose-surprises.vercel.app/images/kitchen.png" alt="Handmade gifts crafted in a San Jose home kitchen">
+      </div>
+      <div class="story reveal d2">
+        <div class="eyebrow">Our Story</div>
+        <h2>Distance should never be the reason someone feels forgotten.</h2>
+        <p>I'm Anu. I grew up watching what miles do to people who love each other — birthdays spent on a video call, big news celebrated alone, apologies typed out instead of held.</p>
+        <p>So I started making things by hand in my San Jose kitchen. Chocolates with the exact flavour someone remembers from childhood. Roses in her favourite colour. Balloons with a name written in gold. Letters in ink, because a screenshot has never made anyone cry.</p>
+        <p>Every surprise leaves this home with one job: make someone feel unforgettable.</p>
+        <div class="tag eyebrow">From Our Home to Your Heart</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SURPRISES -->
+  <section id="surprises">
+    <div class="wrap">
+      <div class="section-head reveal">
+        <div class="eyebrow">What We Create</div>
+        <h2>Six ways to say the thing you keep not saying.</h2>
+        <p>Nothing here is off a shelf. Pick a direction, then we build the details around your budget, their taste and the date that matters.</p>
+      </div>
+      <div class="cards">
+        <div class="card reveal d1">
+          <div class="img-wrap"><img src="https://bethbread-sanjose-surprises.vercel.app/images/chocolates.png" alt="Handmade artisan chocolate truffles in an elegant dark gift box"></div>
+          <div class="card-body">
+            <h3>Handmade Customized Chocolates</h3>
+            <p>Crafted at home in small batches. You pick the flavours, the fillings, the count and the box. We write the rest in cocoa.</p>
+            <div class="card-tags"><span>Truffles</span><span>Dark · Milk · White</span><span>Nuts · Berries · Caramel</span><span>Vegan on request</span></div>
+          </div>
+        </div>
+        <div class="card reveal d2">
+          <div class="img-wrap"><img src="https://bethbread-sanjose-surprises.vercel.app/images/flowers.png" alt="Bouquet of deep red roses wrapped in black tissue paper with satin ribbon"></div>
+          <div class="card-body">
+            <h3>Flower Surprises</h3>
+            <p>Fresh premium stems, arranged the morning they leave us. Roses, tulips, mixed seasonal — in your colour story.</p>
+            <div class="card-tags"><span>Roses</span><span>Tulips</span><span>Mixed seasonal</span><span>Custom palettes</span></div>
+          </div>
+        </div>
+        <div class="card reveal d3">
+          <div class="img-wrap"><img src="https://bethbread-sanjose-surprises.vercel.app/images/balloons.png" alt="Transparent bobo balloon filled with tiny red hearts and confetti"></div>
+          <div class="card-body">
+            <h3>Bobo Balloon Surprises</h3>
+            <p>Clear bubble balloons filled with hearts, confetti and a name in gold. The moment before it pops is the whole gift.</p>
+            <div class="card-tags"><span>Custom colours</span><span>Names & dates</span><span>Confetti fills</span><span>Ribbon work</span></div>
+          </div>
+        </div>
+        <div class="card reveal d1">
+          <div class="img-wrap"><img src="https://bethbread-sanjose-surprises.vercel.app/images/letters.png" alt="Handwritten love letter on cream paper with a red wax seal and dried rose petals"></div>
+          <div class="card-body">
+            <h3>Love Letters & Handwritten Notes</h3>
+            <p>Your words, in real ink, on real paper, sealed in wax. Tell us what you cannot say out loud and we will write it beautifully.</p>
+            <div class="card-tags"><span>Wax seal</span><span>Calligraphy</span><span>Voice or video card</span></div>
+          </div>
+        </div>
+        <div class="card reveal d2">
+          <div class="img-wrap"><img src="https://bethbread-sanjose-surprises.vercel.app/images/combo.png" alt="Luxury gift hamper with roses, chocolates, a heart balloon and a handwritten note"></div>
+          <div class="card-body">
+            <h3>Combo Surprises & Custom Gifts</h3>
+            <p>Mix everything. Chocolates beside roses beside a balloon beside a letter, in one box that takes over the room.</p>
+            <div class="card-tags"><span>Custom hampers</span><span>Proposals</span><span>Big apologies</span><span>Birthdays</span></div>
+          </div>
+        </div>
+        <div class="card reveal d3" style="display:flex;align-items:center;justify-content:center;">
+          <div class="card-body" style="text-align:center;">
+            <h3>& Many More Surprises</h3>
+            <p>Your imagination is the only limit. Proposals, gender reveals, graduation boxes, "I'm sorry" sets, or something nobody has asked for yet.</p>
+          </div>
+        </div>
+        <div class="card wide reveal">
+          <div>
+            <h3>Describe your idea, we'll figure out how to make it real.</h3>
+            <p>No catalog can hold every love story. Tell us yours and we'll design around it.</p>
+          </div>
+          <a class="btn" href="https://wa.me/16696499296?text=Hi%20Anu!%20I%20saw%20your%20website%20and%20I%27d%20love%20to%20plan%20a%20surprise." target="_blank" rel="noopener">Describe your idea</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- HOW IT WORKS -->
+  <section id="how">
+    <div class="wrap">
+      <div class="section-head reveal">
+        <div class="eyebrow">How It Works</div>
+        <h2>A conversation, not a checkout.</h2>
+      </div>
+      <div class="steps">
+        <div class="step reveal d1">
+          <div class="num">1</div>
+          <h3>Tell us the story</h3>
+          <p>Message us on Instagram or WhatsApp. Who is it for, what do they love, what is the occasion, and what feels comfortable for your budget.</p>
+        </div>
+        <div class="step reveal d2">
+          <div class="num">2</div>
+          <h3>We design & quote</h3>
+          <p>Because every surprise is different, there are no fixed prices. We send you options and an honest quote — and yes, we talk it through together.</p>
+        </div>
+        <div class="step reveal d3">
+          <div class="num">3</div>
+          <h3>We craft & deliver</h3>
+          <p>Made fresh in our San Jose home, packed by hand, and delivered on the date that matters. Rush timing available — just ask.</p>
+        </div>
+      </div>
+      <div class="steps-note reveal">Why we quote instead of listing prices: a box of twelve truffles and a full proposal setup are not the same gift. We would rather ask you what you had in mind than force your love story into a price tier.</div>
+    </div>
+  </section>
+
+  <!-- LOVE NOTES -->
+  <section id="love">
+    <div class="wrap">
+      <div class="section-head reveal">
+        <div class="eyebrow">Love Notes</div>
+        <h2>What happened when the box was opened.</h2>
+      </div>
+    </div>
+    <div class="marquee-outer reveal">
+      <div class="marquee" id="marquee">
+        <div class="quote-card"><p class="q">"My wife opened the balloon and cried. I was 2,000 miles away and somehow I was in the room with her."</p><div class="who">Rahul — Anniversary surprise</div></div>
+        <div class="quote-card"><p class="q">"Anu asked me questions no gift shop has ever asked. The chocolates tasted like they were made for one specific person, because they were."</p><div class="who">Priya — Birthday box</div></div>
+        <div class="quote-card"><p class="q">"I messed up badly. The letter and the roses did what my texts could not. We are okay now."</p><div class="who">Daniel — Apology set</div></div>
+        <div class="quote-card"><p class="q">"My wife opened the balloon and cried. I was 2,000 miles away and somehow I was in the room with her."</p><div class="who">Rahul — Anniversary surprise</div></div>
+        <div class="quote-card"><p class="q">"Anu asked me questions no gift shop has ever asked. The chocolates tasted like they were made for one specific person, because they were."</p><div class="who">Priya — Birthday box</div></div>
+        <div class="quote-card"><p class="q">"I messed up badly. The letter and the roses did what my texts could not. We are okay now."</p><div class="who">Daniel — Apology set</div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section id="contact">
+    <div class="wrap">
+      <div class="cta-panel reveal">
+        <div class="eyebrow" style="justify-content:center;">Tell Us Who You Miss</div>
+        <h2>We'll handle the rest.</h2>
+        <p>Send us the occasion, the date, what they love and a budget you're comfortable with. You'll hear back from Anu — usually within a few hours.</p>
+        <a class="btn" href="https://wa.me/16696499296?text=Hi%20Anu!%20I%20saw%20your%20website%20and%20I%27d%20love%20to%20plan%20a%20surprise." target="_blank" rel="noopener">Start a WhatsApp chat</a>
+        <div class="contact-grid">
+          <div class="contact-card">
+            <div class="label">WhatsApp</div>
+            <div class="val">+1 (669) 649-9296</div>
+            <div class="hint">Fastest reply</div>
+          </div>
+          <div class="contact-card">
+            <div class="label">Instagram DM</div>
+            <div class="val">@sanjosesurprises</div>
+            <div class="hint">See our latest work</div>
+          </div>
+          <div class="contact-card">
+            <div class="label">Email</div>
+            <div class="val">bethbread.sanjose@gmail.com</div>
+            <div class="hint">Best for detailed briefs</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  <div class="wrap foot-grid">
+    <div>
+      <div class="logo" style="font-size:20px;">Beth Bread</div>
+      <div class="foot-tag">Crafted in San Jose · Delivered across the USA</div>
+    </div>
+    <div class="foot-links">
+      <a href="https://instagram.com/sanjosesurprises" target="_blank" rel="noopener">@sanjosesurprises</a>
+      <a href="mailto:bethbread.sanjose@gmail.com">bethbread.sanjose@gmail.com</a>
+      <a href="https://wa.me/16696499296">+1 (669) 649-9296</a>
+    </div>
+    <div class="foot-tag">From Our Home to Your Heart</div>
+  </div>
+</footer>
+
+<script>
+  const header = document.getElementById('siteHeader');
+  window.addEventListener('scroll', () => {
+    header.classList.toggle('scrolled', window.scrollY > 40);
+  });
+
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('in'); });
+  }, { threshold: 0.15 });
+  document.querySelectorAll('.reveal').forEach(el => io.observe(el));
+
+  document.querySelectorAll('a[href^="#"]').forEach(a => {
+    a.addEventListener('click', (e) => {
+      const id = a.getAttribute('href');
+      if (id.length > 1) {
+        const target = document.querySelector(id);
+        if (target) { e.preventDefault(); target.scrollIntoView({ behavior: 'smooth' }); }
+      }
+    });
+  });
+</script>
+
+</body>
+</html>

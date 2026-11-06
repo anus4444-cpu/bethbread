@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=1080, height=1920">
+    <script src="assets/gsap.min.js"></script>
+    <style>
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body { width: 1080px; height: 1920px; overflow: hidden; background: #fff3eb; }
+      body { font-family: "Inter", sans-serif; }
+      :root { --accent: #d97757; --ink: #1f1a17; --cream: #fff3eb; --peach: #fad5c6; }
+
+      #root { position: relative; width: 1080px; height: 1920px; overflow: hidden;
+        background: linear-gradient(170deg, var(--cream) 0%, #fde6da 45%, var(--peach) 100%); }
+
+      .blob { position: absolute; border-radius: 50%; filter: blur(10px); opacity: 0.55; }
+      #blob1 { width: 520px; height: 520px; left: -180px; top: 1250px; background: radial-gradient(circle, #f6b89f 0%, rgba(246,184,159,0) 70%); }
+      #blob2 { width: 600px; height: 600px; left: 640px; top: -160px; background: radial-gradient(circle, #ffd9b8 0%, rgba(255,217,184,0) 70%); }
+      #blob3 { width: 420px; height: 420px; left: 760px; top: 1500px; background: radial-gradient(circle, #f3a68a 0%, rgba(243,166,138,0) 70%); }
+
+      /* header badge */
+      #badge { position: absolute; top: 188px; left: 0; width: 1080px; display: flex; justify-content: center; }
+      #badge-pill { display: flex; align-items: center; gap: 14px; padding: 16px 34px; border-radius: 9999px;
+        background: rgba(255,255,255,0.75); border: 1px solid rgba(255,255,255,0.9);
+        box-shadow: 0 10px 25px -5px rgba(120,60,30,0.15); font-size: 40px; font-weight: 700; color: var(--ink); }
+      #badge-pill b { color: var(--accent); font-weight: 900; }
+
+      /* hook */
+      #hook { position: absolute; top: 290px; left: 0; width: 1080px; text-align: center;
+        font-size: 66px; font-weight: 900; color: var(--ink); letter-spacing: -1px; line-height: 1.05; }
+      #hook span { color: var(--accent); }
+
+      /* windows */
+      .win { position: absolute; overflow: hidden; background: #000; }
+      #before-win { left: 60px; top: 560px; width: 290px; height: 516px; border-radius: 14px;
+        box-shadow: 0 10px 25px -5px rgba(0,0,0,0.22); }
+      #after-win { left: 380px; top: 420px; width: 640px; height: 1138px; border-radius: 22px;
+        box-shadow: 0 24px 50px -12px rgba(90,40,20,0.35); }
+      #after-zoom { position: absolute; inset: 0; transform-origin: 50% 32%; }
+      .win video { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+
+      .tag { position: absolute; padding: 8px 20px; border-radius: 9999px; font-size: 28px; font-weight: 900;
+        letter-spacing: 1px; text-transform: uppercase; }
+      #before-tag { left: 76px; top: 516px; background: #18181b; color: #fff; }
+      #after-tag { left: 404px; top: 444px; background: var(--accent); color: #fff; z-index: 5; }
+
+      /* checklist pills under the Before window */
+      #pills { position: absolute; left: 60px; top: 1112px; width: 300px; display: flex; flex-direction: column; gap: 14px; }
+      .pill { align-self: flex-start; padding: 12px 22px; border-radius: 9999px; font-size: 30px; font-weight: 700;
+        background: #ffffff; color: var(--ink); box-shadow: 0 6px 16px -6px rgba(0,0,0,0.18); }
+      .pill.raw { background: #f3f4f6; color: #6b7280; font-family: "JetBrains Mono", monospace; font-size: 28px; }
+      .pill i { font-style: normal; color: var(--accent); font-weight: 900; }
+
+      /* captions (inside the After window, lower third) */
+      #caps { position: absolute; left: 380px; top: 1180px; width: 640px; height: 200px; overflow: visible; z-index: 6; }
+      .cap { position: absolute; left: 0; top: 0; width: 640px; text-align: center; opacity: 0;
+        font-size: 74px; font-weight: 900; color: #fff; line-height: 1.05; letter-spacing: -1px; text-transform: uppercase;
+        text-shadow: 0 4px 0 rgba(0,0,0,0.55), 0 0 18px rgba(0,0,0,0.45); }
+      .cap .w { display: inline-block; margin: 0 0.13em; }
+      .cap .k { color: #ffb08f; }
+
+      #flash { position: absolute; inset: 0; background: #fff; opacity: 0; z-index: 20; pointer-events: none; }
+
+      /* CTA card */
+      #cta { position: absolute; inset: 0; z-index: 30; opacity: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 46px; }
+      #cta-thumb { width: 300px; height: 300px; border-radius: 50%; overflow: hidden; border: 8px solid #fff; box-shadow: 0 20px 40px -12px rgba(90,40,20,0.35); }
+      #cta-thumb img { width: 100%; height: 100%; object-fit: cover; }
+      #cta-title { font-size: 84px; font-weight: 900; color: var(--ink); text-align: center; line-height: 1.05; letter-spacing: -1.5px; }
+      #cta-title span { color: var(--accent); }
+      #cta-sub { font-size: 40px; font-weight: 700; color: #6b5a50; text-align: center; }
+      #follow { position: relative; width: 420px; height: 112px; border-radius: 9999px; }
+      #follow-on, #follow-off { position: absolute; inset: 0; border-radius: 9999px; display: flex; align-items: center; justify-content: center; font-size: 48px; font-weight: 900; }
+      #follow-on { background: var(--accent); color: #fff; box-shadow: 0 14px 30px -10px rgba(217,119,87,0.7); }
+      #follow-off { background: #ece7e3; color: var(--ink); opacity: 0; }
+      #cursor { position: absolute; left: 700px; top: 1500px; width: 64px; height: 64px; z-index: 40; opacity: 0; }
+    </style>
+  </head>
+  <body>
+    <div data-hf-id="hf-qv3y" id="root" data-composition-id="main" data-start="0" data-duration="15.4" data-width="1080" data-height="1920">
+      <div data-hf-id="hf-rpjr" id="blob1" class="blob"></div>
+      <div data-hf-id="hf-gu24" id="blob2" class="blob"></div>
+      <div data-hf-id="hf-hlpx" id="blob3" class="blob"></div>
+
+      <div data-hf-id="hf-wwdm" id="badge"><div data-hf-id="hf-w298" id="badge-pill">Edited by <b data-hf-id="hf-w5xz">Claude</b></div></div>
+      <div data-hf-id="hf-sfyq" id="hook">The <span data-hf-id="hf-p2fk">baddest</span> monster ever?</div>
+
+      <div data-hf-id="hf-1rt5" id="stage">
+        <div data-hf-id="hf-uikk" id="before-win" class="win">
+          <video data-color-grading="{&quot;preset&quot;:null,&quot;intensity&quot;:1,&quot;adjust&quot;:{&quot;exposure&quot;:-0.05,&quot;contrast&quot;:-0.15,&quot;highlights&quot;:0,&quot;shadows&quot;:0,&quot;whites&quot;:0,&quot;blacks&quot;:0,&quot;temperature&quot;:-0.1,&quot;tint&quot;:0,&quot;vibrance&quot;:0,&quot;saturation&quot;:-0.45},&quot;details&quot;:{&quot;vignette&quot;:0,&quot;vignetteMidpoint&quot;:0.5,&quot;vignetteRoundness&quot;:0,&quot;vignetteFeather&quot;:0.65,&quot;grain&quot;:0,&quot;grainSize&quot;:0.25,&quot;grainRoughness&quot;:0.5},&quot;effects&quot;:{&quot;blur&quot;:0,&quot;pixelate&quot;:0,&quot;chromaBleed&quot;:0,&quot;tapeDamage&quot;:0,&quot;tapeTracking&quot;:0,&quot;tapeNoise&quot;:1,&quot;tapeSpeed&quot;:0.5,&quot;filmArtifacts&quot;:0,&quot;halftone&quot;:0,&quot;halftoneSize&quot;:0,&quot;twoInkPrint&quot;:0,&quot;twoInkPrintSize&quot;:0,&quot;ascii&quot;:0,&quot;asciiSize&quot;:0.06578947368421052,&quot;asciiInvert&quot;:0,&quot;asciiStyle&quot;:0,&quot;asciiColor&quot;:1,&quot;asciiRotation&quot;:0,&quot;dither&quot;:0,&quot;ditherSize&quot;:0,&quot;bloom&quot;:0,&quot;bloomRadius&quot;:8,&quot;monoScreen&quot;:0,&quot;monoScreenSize&quot;:0,&quot;monoScreenAngle&quot;:0,&quot;monoScreenSpread&quot;:0,&quot;monoScreenShape&quot;:0,&quot;monoScreenInvert&quot;:0,&quot;scanlines&quot;:0,&quot;scanlineCount&quot;:0,&quot;scanlineSoftness&quot;:0,&quot;chromaticAberration&quot;:0,&quot;chromaticAngle&quot;:0,&quot;crtCurvature&quot;:0,&quot;digitalGlitch&quot;:0,&quot;digitalGlitchColorSplit&quot;:0,&quot;digitalGlitchLineTear&quot;:0,&quot;digitalGlitchPixelate&quot;:0,&quot;digitalGlitchBlockAmount&quot;:0,&quot;digitalGlitchBlockDisplacement&quot;:0,&quot;digitalGlitchBlockOpacity&quot;:0,&quot;digitalGlitchSpeed&quot;:0,&quot;engraving&quot;:0,&quot;engravingSpacing&quot;:0.4117647058823529,&quot;engravingMinThickness&quot;:0.2,&quot;engravingMaxThickness&quot;:0.4571428571428572,&quot;engravingAngle&quot;:0.25,&quot;engravingContrast&quot;:0.4666666666666667,&quot;engravingSharpness&quot;:0.59,&quot;engravingWave&quot;:0.2,&quot;engravingWaveFrequency&quot;:0.2222222222222222,&quot;crosshatch&quot;:0,&quot;crosshatchSpacing&quot;:0.28,&quot;crosshatchThickness&quot;:0.25,&quot;crosshatchAngle&quot;:0.25,&quot;crosshatchContrast&quot;:0.3333333333333333,&quot;crosshatchEdges&quot;:0.5,&quot;crosshatchLineWeight&quot;:0,&quot;crosshatchWave&quot;:0.33,&quot;crosshatchWaveFrequency&quot;:0.2222222222222222,&quot;kuwahara&quot;:0,&quot;kuwaharaRadius&quot;:0.14285714285714285,&quot;kuwaharaSharpness&quot;:0.3125,&quot;kuwaharaSaturation&quot;:0.5},&quot;lut&quot;:null,&quot;colorSpace&quot;:&quot;rec709&quot;}" data-hf-id="hf-k2uf" id="before-vid" class="clip" src="assets/input-before.mp4" muted playsinline data-start="0" data-duration="12.3" data-track-index="1"></video>
+        </div>
+        <div data-hf-id="hf-qi5n" id="before-tag" class="tag">Before</div>
+
+        <div data-hf-id="hf-ooez" id="after-win" class="win">
+          <div data-hf-id="hf-dqlb" id="after-zoom">
+            <video data-color-grading="{&quot;preset&quot;:null,&quot;intensity&quot;:1,&quot;adjust&quot;:{&quot;exposure&quot;:0,&quot;contrast&quot;:0.15,&quot;highlights&quot;:0.05,&quot;shadows&quot;:0.05,&quot;whites&quot;:0,&quot;blacks&quot;:0,&quot;temperature&quot;:0.12,&quot;tint&quot;:0,&quot;vibrance&quot;:0.15,&quot;saturation&quot;:0},&quot;details&quot;:{&quot;vignette&quot;:0.12,&quot;vignetteMidpoint&quot;:0.5,&quot;vignetteRoundness&quot;:0,&quot;vignetteFeather&quot;:0.65,&quot;grain&quot;:0,&quot;grainSize&quot;:0.25,&quot;grainRoughness&quot;:0.5},&quot;effects&quot;:{&quot;blur&quot;:0,&quot;pixelate&quot;:0,&quot;chromaBleed&quot;:0,&quot;tapeDamage&quot;:0,&quot;tapeTracking&quot;:0,&quot;tapeNoise&quot;:1,&quot;tapeSpeed&quot;:0.5,&quot;filmArtifacts&quot;:0,&quot;halftone&quot;:0,&quot;halftoneSize&quot;:0,&quot;twoInkPrint&quot;:0,&quot;twoInkPrintSize&quot;:0,&quot;ascii&quot;:0,&quot;asciiSize&quot;:0.06578947368421052,&quot;asciiInvert&quot;:0,&quot;asciiStyle&quot;:0,&quot;asciiColor&quot;:1,&quot;asciiRotation&quot;:0,&quot;dither&quot;:0,&quot;ditherSize&quot;:0,&quot;bloom&quot;:0,&quot;bloomRadius&quot;:8,&quot;monoScreen&quot;:0,&quot;monoScreenSize&quot;:0,&quot;monoScreenAngle&quot;:0,&quot;monoScreenSpread&quot;:0,&quot;monoScreenShape&quot;:0,&quot;monoScreenInvert&quot;:0,&quot;scanlines&quot;:0,&quot;scanlineCount&quot;:0,&quot;scanlineSoftness&quot;:0,&quot;chromaticAberration&quot;:0,&quot;chromaticAngle&quot;:0,&quot;crtCurvature&quot;:0,&quot;digitalGlitch&quot;:0,&quot;digitalGlitchColorSplit&quot;:0,&quot;digitalGlitchLineTear&quot;:0,&quot;digitalGlitchPixelate&quot;:0,&quot;digitalGlitchBlockAmount&quot;:0,&quot;digitalGlitchBlockDisplacement&quot;:0,&quot;digitalGlitchBlockOpacity&quot;:0,&quot;digitalGlitchSpeed&quot;:0,&quot;engraving&quot;:0,&quot;engravingSpacing&quot;:0.4117647058823529,&quot;engravingMinThickness&quot;:0.2,&quot;engravingMaxThickness&quot;:0.4571428571428572,&quot;engravingAngle&quot;:0.25,&quot;engravingContrast&quot;:0.4666666666666667,&quot;engravingSharpness&quot;:0.59,&quot;engravingWave&quot;:0.2,&quot;engravingWaveFrequency&quot;:0.2222222222222222,&quot;crosshatch&quot;:0,&quot;crosshatchSpacing&quot;:0.28,&quot;crosshatchThickness&quot;:0.25,&quot;crosshatchAngle&quot;:0.25,&quot;crosshatchContrast&quot;:0.3333333333333333,&quot;crosshatchEdges&quot;:0.5,&quot;crosshatchLineWeight&quot;:0,&quot;crosshatchWave&quot;:0.33,&quot;crosshatchWaveFrequency&quot;:0.2222222222222222,&quot;kuwahara&quot;:0,&quot;kuwaharaRadius&quot;:0.14285714285714285,&quot;kuwaharaSharpness&quot;:0.3125,&quot;kuwaharaSaturation&quot;:0.5},&quot;lut&quot;:null,&quot;colorSpace&quot;:&quot;rec709&quot;}" data-hf-id="hf-uqv0" id="after-vid" class="clip" src="assets/input.mp4" playsinline data-has-audio="true" data-start="0" data-duration="12.3" data-track-index="0"></video>
+          </div>
+        </div>
+        <div data-hf-id="hf-fy4v" id="after-tag" class="tag">After</div>
+
+        <div data-hf-id="hf-9c8n" id="pills">
+          <div data-hf-id="hf-763c" id="p0" class="pill raw">raw.mp4</div>
+          <div data-hf-id="hf-l7lh" id="p1" class="pill"><i data-hf-id="hf-5511">+</i> captions</div>
+          <div data-hf-id="hf-9ok1" id="p2" class="pill"><i data-hf-id="hf-9hpl">+</i> colour</div>
+          <div data-hf-id="hf-fdw8" id="p3" class="pill"><i data-hf-id="hf-aomo">+</i> zooms</div>
+          <div data-hf-id="hf-f652" id="p4" class="pill"><i data-hf-id="hf-aabn">+</i> sound</div>
+        </div>
+
+        <div data-hf-id="hf-e9za" id="caps" data-layout-allow-overlap>
+          <div data-hf-id="hf-e6kb" id="c0" class="cap"><span data-hf-id="hf-wyzm" class="w">Hey</span> <span data-hf-id="hf-3lf9" class="w">all,</span></div>
+          <div data-hf-id="hf-a8ga" id="c1" class="cap"><span data-hf-id="hf-0i30" class="w">this</span> <span data-hf-id="hf-fj2o" class="w">is</span> <span data-hf-id="hf-8msr" class="w">like</span></div>
+          <div data-hf-id="hf-6ac9" id="c2" class="cap"><span data-hf-id="hf-9o0j" class="w">the</span> <span data-hf-id="hf-3xl2" class="w k">baddest</span></div>
+          <div data-hf-id="hf-5iog" id="c3" class="cap"><span data-hf-id="hf-xqbn" class="w k">monster</span> <span data-hf-id="hf-v70j" class="w k">ever</span></div>
+          <div data-hf-id="hf-zcyn" id="c4" class="cap"><span data-hf-id="hf-xlyb" class="w">I</span> <span data-hf-id="hf-4zot" class="w">guess</span></div>
+          <div data-hf-id="hf-veum" id="c5" class="cap"><span data-hf-id="hf-j9wa" class="w">so</span> <span data-hf-id="hf-cllv" class="w">I</span> <span data-hf-id="hf-6sjp" class="w">felt</span></div>
+          <div data-hf-id="hf-rgql" id="c6" class="cap"><span data-hf-id="hf-jzuz" class="w">like</span> <span data-hf-id="hf-d0ce" class="w">so</span> <span data-hf-id="hf-bo8z" class="w k">happy</span></div>
+          <div data-hf-id="hf-qp2s" id="c7" class="cap"><span data-hf-id="hf-0ds4" class="w">because</span></div>
+          <div data-hf-id="hf-5m5v" id="c8" class="cap"><span data-hf-id="hf-pgoe" class="w k">yes</span></div>
+          <div data-hf-id="hf-1o1u" id="c9" class="cap"><span data-hf-id="hf-6kv1" class="w k">yes!</span></div>
+          <div data-hf-id="hf-s5da" id="c10" class="cap"><span data-hf-id="hf-q5x0" class="w k">yes!!</span></div>
+          <div data-hf-id="hf-w3hb" id="c11" class="cap"><span data-hf-id="hf-c7au" class="w">I</span> <span data-hf-id="hf-xvi8" class="w k">started</span></div>
+          <div data-hf-id="hf-nflg" id="c12" class="cap"><span data-hf-id="hf-smnz" class="w">doing</span> <span data-hf-id="hf-93fo" class="w">this</span> <span data-hf-id="hf-rpws" class="w">one</span></div>
+          <div data-hf-id="hf-o799" id="c13" class="cap"><span data-hf-id="hf-difl" class="w">and</span> <span data-hf-id="hf-bszt" class="w">I</span> <span data-hf-id="hf-i1cp" class="w">felt</span></div>
+        </div>
+      </div>
+
+      <div data-hf-id="hf-hmg5" id="flash"></div>
+
+      <div data-hf-id="hf-l401" id="cta">
+        <div data-hf-id="hf-hm9y" id="cta-thumb"><img data-hf-id="hf-amub" src="assets/thumb.jpg" alt=""></div>
+        <div data-hf-id="hf-c8wy" id="cta-title">Rate my monster<br data-hf-id="hf-x5px"><span data-hf-id="hf-avyi">1 to 10</span></div>
+        <div data-hf-id="hf-r8cx" id="cta-sub">Tell me in the comments</div>
+        <div data-hf-id="hf-c6ta" id="follow" data-layout-allow-overlap><div data-hf-id="hf-a70t" id="follow-on">Follow</div><div data-hf-id="hf-gu8t" id="follow-off">Following</div></div>
+      </div>
+      <svg data-hf-id="hf-wsq9" id="cursor" viewBox="0 0 24 24"><path data-hf-id="hf-tpiz" d="M4 2 L4 20 L9 15 L12.5 22 L15.5 20.5 L12 13.8 L19 13.8 Z" fill="#1f1a17" stroke="#fff" stroke-width="1.5" stroke-linejoin="round" /></svg>
+
+      <!-- music bed + sfx -->
+      <audio data-hf-id="hf-teco" id="music" class="clip" src="assets/music/lofi.mp3" data-start="0" data-duration="15.4" data-volume="0.16" data-track-index="2"></audio>
+      <audio data-hf-id="hf-gfdl" id="sfx-hook" class="clip" src="assets/sfx/pop.wav" data-start="0.15" data-duration="0.18" data-volume="0.7" data-track-index="3"></audio>
+      <audio data-hf-id="hf-g1ay" id="sfx-p0" class="clip" src="assets/sfx/click.wav" data-start="3.0" data-duration="0.06" data-volume="0.6" data-track-index="3"></audio>
+      <audio data-hf-id="hf-p81k" id="sfx-p1" class="clip" src="assets/sfx/click.wav" data-start="3.5" data-duration="0.06" data-volume="0.6" data-track-index="3"></audio>
+      <audio data-hf-id="hf-t3gr" id="sfx-p2" class="clip" src="assets/sfx/click.wav" data-start="4.0" data-duration="0.06" data-volume="0.6" data-track-index="3"></audio>
+      <audio data-hf-id="hf-wh8h" id="sfx-p3" class="clip" src="assets/sfx/click.wav" data-start="4.5" data-duration="0.06" data-volume="0.6" data-track-index="3"></audio>
+      <audio data-hf-id="hf-9dgs" id="sfx-p4" class="clip" src="assets/sfx/click.wav" data-start="5.0" data-duration="0.06" data-volume="0.6" data-track-index="3"></audio>
+      <audio data-hf-id="hf-o2sr" id="sfx-bad" class="clip" src="assets/sfx/pop.wav" data-start="2.52" data-duration="0.18" data-volume="0.5" data-track-index="4"></audio>
+      <audio data-hf-id="hf-8qqk" id="sfx-happy" class="clip" src="assets/sfx/pop.wav" data-start="6.72" data-duration="0.18" data-volume="0.5" data-track-index="4"></audio>
+      <audio data-hf-id="hf-k1i7" id="sfx-yes1" class="clip" src="assets/sfx/pop.wav" data-start="7.44" data-duration="0.18" data-volume="0.55" data-track-index="4"></audio>
+      <audio data-hf-id="hf-yeq5" id="sfx-yes2" class="clip" src="assets/sfx/pop.wav" data-start="8.0" data-duration="0.18" data-volume="0.6" data-track-index="4"></audio>
+      <audio data-hf-id="hf-o0ph" id="sfx-yes3" class="clip" src="assets/sfx/pop.wav" data-start="8.48" data-duration="0.18" data-volume="0.7" data-track-index="4"></audio>
+      <audio data-hf-id="hf-ut3y" id="sfx-out" class="clip" src="assets/sfx/whoosh.wav" data-start="12.0" data-duration="0.55" data-volume="0.8" data-track-index="5"></audio>
+      <audio data-hf-id="hf-m390" id="sfx-click" class="clip" src="assets/sfx/click.wav" data-start="13.3" data-duration="0.06" data-volume="0.9" data-track-index="5"></audio>
+      <audio data-hf-id="hf-vtl5" id="sfx-ding" class="clip" src="assets/sfx/ding.wav" data-start="13.35" data-duration="0.9" data-volume="0.45" data-track-index="6"></audio>
+    </div>
+
+    <script>
+      window.__timelines = window.__timelines || {};
+      const tl = gsap.timeline({ paused: true });
+
+      // ambient drift on the background blobs
+      tl.to("#blob1", { x: 120, y: -80, duration: 15, ease: "sine.inOut" }, 0);
+      tl.to("#blob2", { x: -90, y: 70, duration: 15, ease: "sine.inOut" }, 0);
+      tl.to("#blob3", { x: -60, y: -60, duration: 15, ease: "sine.inOut" }, 0);
+
+      // hook: already on frame 0, pops at 0.15s, leaves at 2.4s
+      tl.fromTo("#hook", { scale: 0.92 }, { scale: 1, duration: 0.25, ease: "back.out(3)" }, 0.15);
+      tl.to("#hook", { opacity: 0, y: -20, duration: 0.25, ease: "power2.in" }, 2.4);
+
+      // checklist pills: staggered fade + slide (one per click)
+      ["#p0", "#p1", "#p2", "#p3", "#p4"].forEach((id, i) => {
+        tl.fromTo(id, { opacity: 0, y: 20, scale: 0.8 }, { opacity: 1, y: 0, scale: 1, duration: 0.3, ease: "back.out(2.5)" }, 3.0 + i * 0.5);
+      });
+
+      // punch-in jump cuts on the After window (instant steps, like hard cuts)
+      const z = "#after-zoom";
+      tl.set(z, { x: 0, rotation: 0 }, 0);
+      [[0, 1.0], [1.66, 1.06], [2.52, 1.14], [4.46, 1.0], [6.72, 1.16], [7.44, 1.22], [8.0, 1.3], [8.48, 1.38], [9.36, 1.0], [10.02, 1.1], [11.32, 1.04]]
+        .forEach(([t, s]) => tl.set(z, { scale: s }, t));
+      // shake on yes / yes / yes
+      [7.44, 8.0, 8.48].forEach((t) => {
+        tl.set(z, { x: -14, rotation: -1.2 }, t);
+        tl.to(z, { x: 0, rotation: 0, duration: 0.28, ease: "elastic.out(1.2, 0.35)" }, t);
+      });
+      tl.set("#flash", { opacity: 0 }, 0);
+      tl.set("#flash", { opacity: 0.55 }, 8.48);
+      tl.to("#flash", { opacity: 0, duration: 0.2, ease: "power2.out" }, 8.48);
+
+      // captions: one group at a time, word-by-word pop, keywords overshoot
+      const words = [
+        [0.0,0.5],[0.54,1.5],                 // c0
+        [1.66,1.7],[1.72,1.9],[1.94,2.3],     // c1
+        [2.34,2.5],[2.52,3.1],                // c2
+        [3.2,3.6],[3.7,4.3],                  // c3
+        [4.46,4.7],[4.74,5.0],                // c4
+        [5.08,5.8],[5.84,6.0],[6.02,6.2],     // c5
+        [6.24,6.4],[6.46,6.7],[6.72,6.95],    // c6
+        [7.0,7.4],                            // c7
+        [7.44,7.9],[8.0,8.4],[8.48,9.2],      // c8, c9, c10
+        [9.36,9.9],[10.02,10.26],             // c11
+        [10.28,10.7],[10.72,10.98],[11.0,11.3], // c12
+        [11.32,11.5],[11.54,11.68],[11.7,12.2]  // c13
+      ];
+      const groups = gsap.utils.toArray(".cap");
+      let wi = 0;
+      groups.forEach((g, gi) => {
+        const ws = g.querySelectorAll(".w");
+        const gStart = Math.max(0.15, words[wi][0]);
+        const next = groups[gi + 1] ? words[wi + ws.length][0] : 12.2;
+        tl.set(g, { opacity: 1, visibility: "visible" }, gStart);
+        ws.forEach((w, j) => {
+          const t = Math.max(0.15, words[wi + j][0]);
+          const key = w.classList.contains("k");
+          tl.fromTo(w, { opacity: 0, scale: 0.6, y: 12 },
+            { opacity: 1, scale: key ? 1.15 : 1, y: 0, duration: 0.12, ease: "power2.out" }, t);
+          if (key) tl.to(w, { scale: 1, duration: 0.18, ease: "power2.out" }, t + 0.12);
+        });
+        tl.to(g, { opacity: 0, duration: 0.08, ease: "power2.in" }, next - 0.08);
+        tl.set(g, { opacity: 0, visibility: "hidden" }, next);
+        wi += ws.length;
+      });
+
+      // outro: stage flies out, CTA card in, cursor clicks Follow
+      tl.to("#stage", { opacity: 0, scale: 0.9, y: -60, duration: 0.35, ease: "power3.in" }, 12.0);
+      tl.to(["#badge", "#hook"], { opacity: 0, duration: 0.3 }, 12.0);
+      tl.fromTo("#cta", { opacity: 0, y: 80 }, { opacity: 1, y: 0, duration: 0.45, ease: "power3.out" }, 12.3);
+      tl.fromTo("#cta-thumb", { scale: 0.6 }, { scale: 1, duration: 0.5, ease: "back.out(2.2)" }, 12.35);
+      tl.fromTo("#cursor", { opacity: 0, x: 220, y: 260 }, { opacity: 1, x: 0, y: 0, duration: 0.55, ease: "power2.out" }, 12.7);
+      tl.to("#cursor", { scale: 0.82, duration: 0.08, yoyo: true, repeat: 1 }, 13.27);
+      tl.to("#follow", { scale: 0.94, duration: 0.08, yoyo: true, repeat: 1 }, 13.27);
+      tl.to("#follow-off", { opacity: 1, duration: 0.15 }, 13.35);
+      tl.to("#cursor", { opacity: 0, duration: 0.3 }, 14.2);
+
+      window.__timelines["main"] = tl;
+    </script>
+  </body>
+</html>

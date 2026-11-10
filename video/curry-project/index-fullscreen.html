@@ -1,0 +1,173 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <script src="assets/gsap.min.js"></script>
+    <style>
+      @font-face { font-family: "Noto Color Emoji"; src: url("assets/fonts/NotoColorEmoji.ttf"); }
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body { width: 1080px; height: 1920px; overflow: hidden; background: #140d0a; }
+      body { font-family: "Poppins", "Noto Color Emoji", sans-serif; }
+      :root { --gold: #f7c04a; --cream: #fff4e3; --coral: #f05a3c; --bg: #140d0a; }
+
+      #root { position: relative; width: 1080px; height: 1920px; overflow: hidden;
+        background: radial-gradient(ellipse 900px 900px at 540px 1080px, #5a2a12 0%, #2a150c 45%, #140d0a 75%); }
+
+      /* progress bar */
+      #prog { position: absolute; left: 90px; top: 188px; width: 900px; height: 10px; border-radius: 9999px; background: rgba(255,244,227,0.14); overflow: hidden; }
+      #prog-fill { position: absolute; left: 0; top: 0; width: 900px; height: 10px; border-radius: 9999px; background: linear-gradient(90deg, var(--gold), var(--coral)); transform-origin: 0 50%; }
+      #brand { position: absolute; top: 222px; left: 0; width: 1080px; text-align: center; font-size: 28px; font-weight: 700; letter-spacing: 10px; color: rgba(255,244,227,0.75); }
+
+      /* pan circle */
+      #pan-wrap { position: absolute; left: 0; top: 0; width: 1080px; height: 1920px; overflow: hidden; z-index: 0; }
+      #pan-glow { position: absolute; left: 0; top: 0; width: 1080px; height: 1920px; z-index: 2; pointer-events: none;
+        background: linear-gradient(180deg, rgba(14,8,5,0.92) 0%, rgba(14,8,5,0.78) 16%, rgba(14,8,5,0.35) 30%, rgba(14,8,5,0) 40%, rgba(14,8,5,0) 72%, rgba(14,8,5,0.55) 86%, rgba(14,8,5,0.85) 100%); }
+      #pan { position: absolute; left: 0; top: 0; width: 1080px; height: 1920px; overflow: hidden; background: #000; z-index: 1; }
+      #pan video { position: absolute; left: 0; top: 0; width: 1080px; height: 1920px; object-fit: cover; }
+      #flash { position: absolute; inset: 0; background: #fff; opacity: 0; }
+
+      /* hook */
+      #hook { position: absolute; top: 262px; left: 0; width: 1080px; text-align: center; }
+      #hook-pill { display: inline-block; padding: 12px 34px; border-radius: 9999px; background: var(--gold); color: #1d120c; font-size: 38px; font-weight: 800; letter-spacing: 4px; }
+      #hook-title { margin-top: 14px; font-family: "Playfair Display", serif; font-weight: 900; font-size: 108px; line-height: 0.95; color: var(--cream); letter-spacing: -2px; text-shadow: 0 6px 24px rgba(0,0,0,0.5); }
+      #hook-title span { color: var(--gold); }
+      #hook-sub { position: absolute; top: 1610px; text-shadow: 0 3px 14px rgba(0,0,0,0.8); left: 0; width: 1080px; text-align: center; font-size: 42px; font-weight: 700; color: var(--cream); }
+      #hook-sub b { color: var(--gold); }
+
+      /* steps */
+      .step { position: absolute; top: 262px; left: 0; width: 1080px; text-align: center; opacity: 0; }
+      .count { display: inline-block; padding: 10px 28px; border-radius: 9999px; background: rgba(255,244,227,0.12); border: 2px solid rgba(247,192,74,0.6);
+        color: var(--gold); font-size: 32px; font-weight: 800; letter-spacing: 4px; }
+      .txt { margin-top: 18px; font-family: "Playfair Display", serif; font-weight: 900; font-size: 92px; line-height: 1.0; color: var(--cream); letter-spacing: -1px;
+        padding: 0 60px; text-shadow: 0 6px 24px rgba(0,0,0,0.55); }
+      .txt span { color: var(--gold); }
+      .sub { margin-top: 14px; font-size: 36px; font-weight: 600; color: rgba(255,244,227,0.8); }
+
+      #tease { position: absolute; top: 1620px; left: 0; width: 1080px; text-align: center; opacity: 0; }
+      #tease div { display: inline-block; padding: 14px 32px; border-radius: 9999px; background: var(--coral); color: #fff; font-size: 38px; font-weight: 800; }
+
+      /* end card */
+      #end { position: absolute; inset: 0; opacity: 0; background: radial-gradient(ellipse 900px 900px at 540px 760px, #5a2a12 0%, #2a150c 45%, #140d0a 75%);
+        display: flex; flex-direction: column; align-items: center; padding-top: 330px; }
+      #end-dish { width: 560px; height: 560px; border-radius: 50%; overflow: hidden; box-shadow: 0 0 0 8px rgba(247,192,74,0.9), 0 30px 80px -10px rgba(0,0,0,0.7); }
+      #end-dish img { width: 100%; height: 100%; object-fit: cover; }
+      #end-save { margin-top: 70px; display: flex; align-items: center; gap: 22px; padding: 22px 52px; border-radius: 9999px; background: var(--gold); color: #1d120c; font-size: 64px; font-weight: 900; }
+      #end-save svg { width: 56px; height: 56px; }
+      #end-title { margin-top: 40px; font-family: "Playfair Display", serif; font-weight: 900; font-size: 84px; color: var(--cream); text-align: center; line-height: 1.0; }
+      #end-sub { margin-top: 26px; font-size: 40px; font-weight: 600; color: rgba(255,244,227,0.8); }
+      #end-brand { margin-top: 36px; font-size: 30px; font-weight: 700; letter-spacing: 10px; color: var(--gold); }
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="35.5" data-width="1080" data-height="1920">
+      <div id="pan-wrap">
+        <div id="pan">
+          <video id="base" class="clip" src="assets/base.mp4" muted playsinline data-start="0" data-duration="32.7" data-track-index="0"></video>
+          <div id="flash"></div>
+        </div>
+        <div id="pan-glow"></div>
+      </div>
+
+      <div id="prog"><div id="prog-fill"></div></div>
+      <div id="brand">ANU'S KITCHEN</div>
+
+
+      <div id="hook">
+        <div id="hook-pill">MY STYLE</div>
+        <div id="hook-title">Chicken<br /><span>Curry</span> 🔥</div>
+      </div>
+      <div id="hook-sub">Full recipe 👇 <b>save it now</b></div>
+
+      <div id="st1" class="step"><div class="count">STEP 1 / 13</div><div class="txt">Heat the <span>oil</span></div></div>
+      <div id="st2" class="step"><div class="count">STEP 2 / 13</div><div class="txt">Onions + <span>whole spices</span></div><div class="sub">bay leaf · star anise · cardamom</div></div>
+      <div id="st3" class="step"><div class="count">STEP 3 / 13</div><div class="txt">A pinch of <span>salt</span></div></div>
+      <div id="st4" class="step"><div class="count">STEP 4 / 13</div><div class="txt">Sauté till <span>soft</span></div></div>
+      <div id="st5" class="step"><div class="count">STEP 5 / 13</div><div class="txt"><span>Green</span> chillies</div></div>
+      <div id="st6" class="step"><div class="count">STEP 6 / 13</div><div class="txt">Fry till <span>golden</span></div></div>
+      <div id="st7" class="step"><div class="count">STEP 7 / 13</div><div class="txt">Chopped <span>tomatoes</span></div></div>
+      <div id="st8" class="step"><div class="count">STEP 8 / 13</div><div class="txt">Cover · let them <span>melt</span></div></div>
+      <div id="st9" class="step"><div class="count">STEP 9 / 13</div><div class="txt"><span>Chilli powder</span> + masala</div></div>
+      <div id="st10" class="step"><div class="count">STEP 10 / 13</div><div class="txt">A spoon of <span>curd</span></div></div>
+      <div id="st11" class="step"><div class="count">STEP 11 / 13</div><div class="txt">Stir into a <span>silky gravy</span></div></div>
+      <div id="st12" class="step"><div class="count">STEP 12 / 13</div><div class="txt">In goes the <span>chicken</span></div></div>
+      <div id="st13" class="step"><div class="count">STEP 13 / 13</div><div class="txt">Cover · cook till <span>tender</span></div></div>
+      <div id="st14" class="step"><div class="count">THE REVEAL</div><div class="txt">Look at that <span>gravy</span> 😍</div></div>
+      <div id="st15" class="step"><div class="count">FINISH</div><div class="txt">Fresh <span>coriander</span> 🌿</div></div>
+
+      <div id="tease"><div>Wait for the final look 👀</div></div>
+
+      <div id="end">
+        <div id="end-dish"><img src="assets/final.jpg" alt="" /></div>
+        <div id="end-save"><svg viewBox="0 0 24 24"><path d="M6 2h12a1 1 0 0 1 1 1v19l-7-4.5L5 22V3a1 1 0 0 1 1-1z" fill="#1d120c"/></svg>SAVE THIS RECIPE</div>
+        <div id="end-title">My style chicken curry</div>
+        <div id="end-sub">Follow for daily recipes</div>
+        <div id="end-brand">ANU'S KITCHEN</div>
+      </div>
+    </div>
+
+    <script>
+      window.__timelines = window.__timelines || {};
+      const tl = gsap.timeline({ paused: true });
+      const END = 35.5, VID = 32.7;
+
+      // segment boundaries in base.mp4 (from segs.json)
+      const S = { h2: 2.0, s1: 3.2, s2: 4.4, s3: 6.4, s4: 7.733, s5: 9.733, s6: 11.4, s7: 13.2, s8: 15.2, s9: 16.7,
+                  s10: 18.7, s11: 20.7, s12: 22.7, s13: 25.167, s14: 26.633, s15: 29.567 };
+      const order = ["s1","s2","s3","s4","s5","s6","s7","s8","s9","s10","s11","s12","s13","s14","s15"];
+
+      // baselines
+      tl.set("#prog-fill", { scaleX: 0 }, 0);
+      tl.set("#pan", { scale: 1, rotation: 0 }, 0);
+      tl.set("#flash", { opacity: 0 }, 0);
+
+      // progress bar runs the whole film
+      tl.to("#prog-fill", { scaleX: 1, duration: END, ease: "none" }, 0);
+
+      // HOOK: title already on frame 0, slams in, slow push on the pan
+      tl.fromTo("#hook-title", { scale: 0.88 }, { scale: 1, duration: 0.35, ease: "back.out(2.2)" }, 0);
+      tl.fromTo("#hook-pill", { scale: 0.8 }, { scale: 1, duration: 0.3, ease: "back.out(3)" }, 0.05);
+      tl.fromTo("#hook-sub", { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.3, ease: "power2.out" }, 0.5);
+      tl.to("#pan", { scale: 1.06, duration: 2.0, ease: "none" }, 0);
+      // flash cut to the lid reveal
+      tl.set("#flash", { opacity: 0.8 }, S.h2);
+      tl.to("#flash", { opacity: 0, duration: 0.25, ease: "power2.out" }, S.h2);
+      tl.set("#pan", { scale: 1.12 }, S.h2);
+      tl.to("#pan", { scale: 1.0, duration: 1.1, ease: "power2.out" }, S.h2);
+      tl.to(["#hook", "#hook-sub"], { opacity: 0, y: -20, duration: 0.2, ease: "power2.in" }, S.s1 - 0.2);
+
+      // STEPS: each title pops in on its cut, punch-in on the pan per cut
+      order.forEach((k, i) => {
+        const t = S[k];
+        const next = i < order.length - 1 ? S[order[i + 1]] : VID;
+        const el = "#st" + (i + 1);
+        tl.fromTo(el, { opacity: 0, y: 30, scale: 0.92 }, { opacity: 1, y: 0, scale: 1, duration: 0.22, ease: "back.out(2.5)" }, t);
+        tl.to(el, { opacity: 0, duration: 0.1, ease: "power2.in" }, next - 0.1);
+        tl.set(el, { opacity: 0 }, next);
+        // punch-in cut feel
+        tl.set("#pan", { scale: 1.05, rotation: i % 2 ? 0.8 : -0.8 }, t);
+        tl.to("#pan", { scale: 1.0, rotation: 0, duration: 0.3, ease: "power2.out" }, t);
+      });
+
+      // mid-film teaser to hold viewers
+      tl.fromTo("#tease", { opacity: 0, y: 30 }, { opacity: 1, y: 0, duration: 0.25, ease: "back.out(2.5)" }, S.s6);
+      tl.to("#tease", { opacity: 0, duration: 0.2 }, S.s9 - 0.2);
+
+      // reveal: white flash + slow push as the lid lifts
+      tl.set("#flash", { opacity: 0.7 }, S.s14 + 0.5);
+      tl.to("#flash", { opacity: 0, duration: 0.35, ease: "power2.out" }, S.s14 + 0.5);
+      tl.to("#pan", { scale: 1.08, duration: 2.4, ease: "sine.inOut" }, S.s14 + 0.3);
+      tl.to("#pan", { scale: 1.0, duration: 0.3 }, S.s15);
+      tl.to("#pan", { scale: 1.07, duration: 2.8, ease: "none" }, S.s15 + 0.3);
+
+      // END CARD
+      tl.fromTo("#end", { opacity: 0 }, { opacity: 1, duration: 0.3, ease: "power2.out" }, VID - 0.1);
+      tl.fromTo("#end-dish", { scale: 0.6 }, { scale: 1, duration: 0.5, ease: "back.out(2)" }, VID - 0.05);
+      tl.fromTo("#end-save", { opacity: 0, y: 40, scale: 0.8 }, { opacity: 1, y: 0, scale: 1, duration: 0.35, ease: "back.out(2.5)" }, VID + 0.25);
+      tl.to("#end-save", { scale: 1.08, duration: 0.25, yoyo: true, repeat: 3, ease: "sine.inOut" }, VID + 0.9);
+      tl.fromTo(["#end-title", "#end-sub", "#end-brand"], { opacity: 0, y: 24 }, { opacity: 1, y: 0, duration: 0.3, stagger: 0.12, ease: "power2.out" }, VID + 0.45);
+
+      window.__timelines["main"] = tl;
+    </script>
+  </body>
+</html>
